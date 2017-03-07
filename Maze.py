@@ -1,9 +1,10 @@
 """To find a solution for a randomly generated maze where you have a starting point, a key and an ending point. The path would first find the path to reach the key from the starting point and then find the path from the key to the ending point. The path will be found by using an implemented stack. Finally, it will display the path it took to complete the maze using graphics."""
 
 from random import shuffle, randrange#imports libraries used to random numbers
-from graphics import *#imports libraries used to display graphics
+from graphics import *#imports the graphics.py library to draw a window
 
-class MyStack:#implements a stack structure which will be used in the process of path finding
+"""Implements a stack structure which will be used in the process of path finding"""
+class MyStack:
      def __init__(self):#initialization of class constructor 
          self.items = []#initializes the stack as empty 
 
@@ -19,7 +20,8 @@ class MyStack:#implements a stack structure which will be used in the process of
      def size(self):#to find the size of the stack
          return len(self.items)#returns the length of the stack as an integer 
 
-class Maze:#The main program to create the maze and find the solution to it
+"""The main program to create the maze and find the solution to it"""
+class Maze:
     def __init__(self,n):#initializes the maze with a nxn grid
         #Initializations for the grids/lists used later on in the code
         self.N=n#size of the grid(nxn)
@@ -149,11 +151,11 @@ class Maze:#The main program to create the maze and find the solution to it
                   pathrec.setFill('cyan')#the rectangle the path is shown with is colored cyan
                   pathrec.setOutline("white")#the outline of the rectangle is white
                   pathrec.draw(win)#this draws the created rectangle to the window
-        
-    def Explore(self,x,y):#this essentially finds the path from a starting point x,y to the key and then to the end point
+"""This finds the path from a starting point x,y to the key and then from key to the end point and displays the path"""
+    def Explore(self,x,y):
          self.startx=x#sets the starting x point to the given x of the cell from where the maze is to be explored
          self.starty=y#sets the starting y point to the given y of the cell from where the maze is to be explored
-#-------------------START XY TO KEY----------------         
+		 #-------------------START XY TO KEY----------------         
          self.vforexp[x][y]=1#the starting cell on the visited list is marked as visited
          vforexp=self.vforexp#assigns the visited list to a temporary variable that will be used to find the path
          vforexp[x][y]=1#sets the starting cell on the visited list to visited
@@ -207,7 +209,7 @@ class Maze:#The main program to create the maze and find the solution to it
               route1.append(exp.pop())#pops the whole path onto the route but since we are popping it, it will be in reverse order
               
          route1.reverse() #reverse the route so its from starting point to key
-#----------------FROM KEY TO END-----------------              
+		 #----------------FROM KEY TO END-----------------              
          x=self.keyx#sets the starting x point to the key's x value from where the maze is to be explored
          y=self.keyy#sets the starting y point to the key's y value from where the maze is to be explored
          self.vforexp2[x][y]=1#the starting cell which is the key in this case is marked as visited on the visited list
@@ -275,8 +277,8 @@ class Maze:#The main program to create the maze and find the solution to it
                    self.path.append(routefinal[i])#we add the route to the path of the maze so it can be drawn
             
             
-
-def changelist(x):#makes borders around the initial grid to avoid special cases by making the border cells=1 for the corresponding list
+"""Makes borders around the initial grid to avoid special cases by making the border cells=1 for the corresponding list"""
+def changelist(x):
     for i in range(len(x[0])):#loops through the grid and sets all the edges to 1
         x[0][i]=1#sets top edge cells to 1
         x[len(x)-1][i]=1#sets bottom edge cells to 1
@@ -285,7 +287,8 @@ def changelist(x):#makes borders around the initial grid to avoid special cases 
 
     return x#returns the list after fixing the edges
 
-def previousspot(x,y,tracker):#To backtrack for maze which returns the previous positions x and y from the list by taking in the tracker list and the current x and y values
+"""To backtrack for maze which returns the previous positions x and y from the list by taking in the tracker list and the current x and y values"""
+def previousspot(x,y,tracker):
     newx=0#initialize x variable to return as previous x
     newy=0#initialize y variable to return as previous y
     k=1#variable to break out of for loop
@@ -295,15 +298,3 @@ def previousspot(x,y,tracker):#To backtrack for maze which returns the previous 
             newx=tracker[i-1][0]#previous x is set here
             newy=tracker[i-1][1]#previous y is set here
     return newx,newy#returns previous x and y values in the tracker so that it can go back to the previous cell and break more walls in that cell
-
-
- 
-            
-
-    
-    
-    
-
-        
-        
-    
