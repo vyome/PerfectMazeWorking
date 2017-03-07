@@ -170,7 +170,7 @@ class Maze:#The main program to create the maze and find the solution to it
                 repeat=1#variable to push the x and y into the stack again on the next iteration 
                 
               else:#if there is a move possible from the cell
-                   if repeat==1:#this is where the variable gets pushed
+                   if repeat==1:#this is where the popped point gets pushed again
                         exp.push((x,y))#pushes the previously popped cell back onto the stack as it is being used again
                         repeat=0#set to 0 so we dont push every cell back onto the stack
                    count=0#sets the variable to 0 to check if the randomly generated move is possible
@@ -208,74 +208,71 @@ class Maze:#The main program to create the maze and find the solution to it
               
          route1.reverse() #reverse the route so its from starting point to key
 #----------------FROM KEY TO END-----------------              
-         x=self.keyx
-         y=self.keyy
-         self.vforexp2[x][y]=1
-         vforexp2=self.vforexp2
-         vforexp2[x][y]=1
-         a=0
-         exp2=MyStack()
-         exp2.push((x,y))
-         repeat=0
-         while a==0:
-              if (self.north[x][y]==1 or vforexp2[x-1][y]==1) and (self.south[x][y]==1 or vforexp2[x+1][y]==1) and (self.west[x][y]==1 or vforexp2[x][y-1]==1) and (self.east[x][y]==1 or vforexp2[x][y+1]==1):
+         x=self.keyx#sets the starting x point to the key's x value from where the maze is to be explored
+         y=self.keyy#sets the starting y point to the key's y value from where the maze is to be explored
+         self.vforexp2[x][y]=1#the starting cell which is the key in this case is marked as visited on the visited list
+         vforexp2=self.vforexp2#assigns the visited list to a temporary variable that will be used to find the path to the end
+         vforexp2[x][y]=1#sets the starting cell on the visited list to visited
+         a=0#used as a boolean for the while loop till a path is found to the end of the maze
+         exp2=MyStack()#a stack is initialized to keep track of the path we are going through
+         exp2.push((x,y))#push the key's coordinates on the stack as this is where we start our path
+         repeat=0#variable to check if we need to push a popped point back onto the stack
+         while a==0:#while we havent found a path to the end from the key
+              if (self.north[x][y]==1 or vforexp2[x-1][y]==1) and (self.south[x][y]==1 or vforexp2[x+1][y]==1) and (self.west[x][y]==1 or vforexp2[x][y-1]==1) and (self.east[x][y]==1 or vforexp2[x][y+1]==1):#checks if all moves from a certain cell are blocked, meaning if all sides are either closed or the cells on that side have already been visited
 
-                z=exp2.pop()
+                z=exp2.pop()#if the case is true that there is no move from that cell we pop and go back to the previous cell we were on
                 
-                x,y=z[0],z[1]
-                repeat=1
+                x,y=z[0],z[1]#sets the x and y values to the previous cells x and y essentially going back to the previous cell
+                repeat=1#variable to push the x and y into the stack again on the next iteration 
                 
-              else:
-                   if repeat==1:
-                        exp2.push((x,y))
-                        repeat=0 
-                   count=0
-                   while count==0:
-                       r=randrange(1,5)
-                       if (r==1 and (self.north[x][y]==1 or vforexp2[x-1][y]==1))or (r==2 and (self.south[x][y]==1 or vforexp2[x+1][y]==1)) or (r==3 and (self.west[x][y]==1 or vforexp2[x][y-1]==1)) or (r==4 and (self.east[x][y]==1 or vforexp2[x][y+1]==1)):
-                           count=0
+              else:#if there is a move possible from the cell
+                   if repeat==1:#this is where the popped point gets pushed again
+                        exp2.push((x,y))#pushes the previously popped cell back onto the stack as it is being used again
+                        repeat=0 #set to 0 so we dont push every cell back onto the stack
+                   count=0#sets the variable to 0 to check if the randomly generated move is possible
+                   while count==0:#runs until the randomly generated move is acceptable
+                       r=randrange(1,5)#randoms a number from 1 to 4 where 1=move north 2=move south 3=move west and 4=move east
+                       if (r==1 and (self.north[x][y]==1 or vforexp2[x-1][y]==1))or (r==2 and (self.south[x][y]==1 or vforexp2[x+1][y]==1)) or (r==3 and (self.west[x][y]==1 or vforexp2[x][y-1]==1)) or (r==4 and (self.east[x][y]==1 or vforexp2[x][y+1]==1)):#this essentially checks if all the moves are possible in every direction depending on the random number and whether the side we are trying to move to is blocked or has already been visited
+                           count=0#we keep trying if this is the case
                        else:
-                           count=1
-                   if r==1:#north
+                           count=1#if we find a valid move, we break out of the while loop
+                   if r==1:#if we're moving north
                        
-                       x=x-1
-                       y=y
-                   if r==2:#south
+                       x=x-1#we set x to the north cell's value
+                       y=y#we set y to the north cell's value
+                   if r==2:#if we're moving south
                        
-                       x=x+1
-                       y=y
-                   if r==3:#west
+                       x=x+1#we set x to the south cell's value
+                       y=y#we set y to the south cell's value
+                   if r==3:#if we're moving west
                        
-                       x=x
-                       y=y-1
-                   if r==4:#east
+                       x=x#we set x to the west cell's value
+                       y=y-1#we set y to the west cell's value
+                   if r==4:#if we're moving east
                        
-                       x=x
-                       y=y+1
+                       x=x#we set x to the east cell's value
+                       y=y+1#we set y to the east cell's value
                     
-                   vforexp2[x][y]=1 
+                   vforexp2[x][y]=1 #we set the cell as visited on the visited cell list
                    
-                   exp2.push((x,y))
-              if x==self.endx and y==self.endy:
-                   a=1 
+                   exp2.push((x,y))#we push the cell we just moved into onto the stack for the path
+              if x==self.endx and y==self.endy:#if we have reached the end
+                   a=1 #we break out of the loop as we have found the path
            
-         route=[] 
-         for i in range(exp2.size()):
-              route.append(exp2.pop())
-         route.reverse()
-         routefinal=[]
-         route.pop(0)
-         for i in range(len(route1)):
-              routefinal.append(route1[i])
-         for i in range(len(route)):
-              routefinal.append(route[i])
-              
-         
-         
-         for i in range(len(routefinal)):
-              print(routefinal[i],end=" ")
-              if routefinal[i]!=(self.keyx,self.keyy):
-                   self.path.append(routefinal[i])
+         route=[] #this is a variable to store the path from the starting point to the key
+         for i in range(exp2.size()):#goes through the whole path
+              route.append(exp2.pop())#pops the whole path onto the route but since we are popping it, it will be in reverse order
+         route.reverse()#reverse the route so its from starting point to key
+         routefinal=[]#this is a variable to store the whole path by combining the path from start to key and key to end
+         route.pop(0)#we pop the first element of the the first path so the key's coordinates are not repeated twice
+         for i in range(len(route1)):#loop through the path from start to key
+              routefinal.append(route1[i])#add the coordinates to the final route
+         for i in range(len(route)):#loop through the path from key to end
+              routefinal.append(route[i])#add the coordinates to the final route
+         for i in range(len(routefinal)):#loop through the final path coordinates
+              print(routefinal[i],end=" ")#prints the final path out to the user
+              if routefinal[i]!=(self.keyx,self.keyy):#as long as the coordinates do not match the keys coordinates
+                   self.path.append(routefinal[i])#we add the route to the path of the maze so it can be drawn
             
             
 
